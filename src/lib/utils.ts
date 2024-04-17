@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatMonry(amount: number) {
+export function formatMoney(amount: number) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
