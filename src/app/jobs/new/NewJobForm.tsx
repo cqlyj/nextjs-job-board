@@ -17,6 +17,9 @@ import Select from "@/components/ui/select";
 import { jobTypes, locationTypes } from "@/lib/job-types";
 import LocationInput from "@/components/LocationInput";
 import { X } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import RichTextEditor from "@/components/RichTextEditor";
+import { draftToMarkdown } from "markdown-draft-js";
 
 const NewJobForm = () => {
   const form = useForm<CreateJobValues>({
@@ -175,6 +178,71 @@ const NewJobForm = () => {
                       </button>
                     </div>
                   )}
+                  <FormMessage></FormMessage>
+                </FormItem>
+              )}
+            ></FormField>
+            <div className="space-y-2">
+              <Label htmlFor="applicationEmail">How to apply</Label>
+              <div className="flex justify-between">
+                <FormField
+                  control={control}
+                  name="applicationEmail"
+                  render={({ field }) => (
+                    <FormItem className="grow">
+                      <FormControl>
+                        <div className="flex items-center">
+                          <Input
+                            id="applicationEmail"
+                            placeholder="Email"
+                            type="email"
+                            {...field}
+                          ></Input>
+                          <span className="mx-2">or</span>
+                        </div>
+                      </FormControl>
+                      <FormMessage></FormMessage>
+                    </FormItem>
+                  )}
+                ></FormField>
+                <FormField
+                  control={control}
+                  name="applicationUrl"
+                  render={({ field }) => (
+                    <FormItem className="grow">
+                      <FormControl>
+                        <Input
+                          placeholder="Websites"
+                          type="url"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e.target.value);
+                            trigger("applicationEmail");
+                          }}
+                        ></Input>
+                      </FormControl>
+                      <FormMessage></FormMessage>
+                    </FormItem>
+                  )}
+                ></FormField>
+              </div>
+            </div>
+            <FormField
+              control={control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel onClick={() => setFocus("description")}>
+                    Description
+                  </FormLabel>
+                  <FormControl>
+                    <RichTextEditor
+                      onChange={(draft) => {
+                        draftToMarkdown(draft);
+                      }}
+                      ref={field.ref}
+                    ></RichTextEditor>
+                  </FormControl>
                   <FormMessage></FormMessage>
                 </FormItem>
               )}
