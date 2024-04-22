@@ -20,6 +20,7 @@ import { X } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import RichTextEditor from "@/components/RichTextEditor";
 import { draftToMarkdown } from "markdown-draft-js";
+import LoadingButton from "@/components/LoadingButton";
 
 const NewJobForm = () => {
   const form = useForm<CreateJobValues>({
@@ -138,7 +139,16 @@ const NewJobForm = () => {
                 <FormItem>
                   <FormLabel>Location</FormLabel>
                   <FormControl>
-                    <Select {...field} defaultValue="">
+                    <Select
+                      {...field}
+                      defaultValue=""
+                      onChange={(e) => {
+                        field.onChange(e);
+                        if (e.currentTarget.value === "Remote") {
+                          trigger("location");
+                        }
+                      }}
+                    >
                       <option value="" hidden>
                         Select a job type
                       </option>
@@ -238,7 +248,7 @@ const NewJobForm = () => {
                   <FormControl>
                     <RichTextEditor
                       onChange={(draft) => {
-                        draftToMarkdown(draft);
+                        field.onChange(draftToMarkdown(draft));
                       }}
                       ref={field.ref}
                     ></RichTextEditor>
@@ -247,6 +257,22 @@ const NewJobForm = () => {
                 </FormItem>
               )}
             ></FormField>
+            <FormField
+              control={control}
+              name="salary"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Salary</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="number"></Input>
+                  </FormControl>
+                  <FormMessage></FormMessage>
+                </FormItem>
+              )}
+            ></FormField>
+            <LoadingButton type="submit" loading={isSubmitting}>
+              Submit
+            </LoadingButton>
           </form>
         </Form>
       </div>
